@@ -48,6 +48,12 @@ public class Controller {
         return service.updateById(id, employee);
     }
 
+    @PutMapping("/users/pay/{id}/{sum}")
+    @ResponseStatus(HttpStatus.OK)
+    public Employee payEmployee(@PathVariable("id") Integer id, @PathVariable("sum") String sum) {
+        return service.pay(id, sum);
+    }
+
     //Удаление по id
     @PatchMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -66,6 +72,12 @@ public class Controller {
     @ResponseStatus(HttpStatus.OK)
     public Employee findByEmail(@RequestParam(value = "email") String email){
         return service.findByEmail(email);
+    }
+
+    @GetMapping("/users/plan")
+    @ResponseStatus(HttpStatus.OK)
+    public List<Employee> findByCountryAndPlan(@RequestParam(value = "country") String country, @RequestParam(value = "plan") Integer plan){
+        return service.findAllByPlanAndCountry(country,plan);
     }
 
 }
