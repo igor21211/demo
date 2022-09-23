@@ -122,6 +122,8 @@ class ServiceTest {
         Employee actual = new Employee();
         actual.setId(101);
 
+
+
         when(repository.findById(actual.getId())).thenReturn(Optional.of(actual));
 
         Employee expected = service.getById(actual.getId());
@@ -143,4 +145,16 @@ class ServiceTest {
         verify(repository).findById(employee.getId());
     }
 
+    @Test
+    public void EmptyBodyAnswer2() {
+        Employee employee = new Employee();
+        employee.setId(88);
+
+        when(repository.findById(employee.getId())).thenReturn(Optional.of(employee));
+
+        Employee expected = service.getById(employee.getId());
+
+        assertThat(expected).isSameAs(employee);
+        verify(repository).findById(employee.getId());
+    }
 }
