@@ -2,17 +2,14 @@ package com.example.demo.service;
 
 import com.example.demo.domain.Employee;
 import com.example.demo.repository.Repository;
-import com.example.demo.util.ResourceNotFoundException;
-import com.example.demo.util.ResourceWasDeletedException;
+import com.example.demo.util.Exeptions.ResourceNotFoundException;
+import com.example.demo.util.Exeptions.ResourceWasDeletedException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.Date.from;
 
