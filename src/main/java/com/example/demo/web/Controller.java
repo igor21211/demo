@@ -1,6 +1,9 @@
 package com.example.demo.web;
 
+import com.example.demo.config.EmployeeConverter;
 import com.example.demo.domain.Employee;
+import com.example.demo.dto.EmployeeDto;
+import com.example.demo.dto.EmployeeReadDto;
 import com.example.demo.service.Service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+
 @Slf4j
 @RestController
 @AllArgsConstructor
@@ -17,13 +22,15 @@ public class Controller {
 
     private final Service service;
 
+    private final EmployeeConverter converter;
+
     //Операция сохранения юзера в базу данных
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee saveEmployee(@RequestBody Employee employee) {
-        log.info("created employee");
-        return service.create(employee);
-
+    public EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto requestForSave) {
+        Employee employee = converter.getMapperFacade().map(requestForSave, Employee.class);
+        EmployeeDto dto = converter.toDto(service.create(employee));
+        return dto;
     }
 
     //Получение списка юзеров
@@ -36,8 +43,12 @@ public class Controller {
     //Получения юзера по id
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee getEmployeeById(@PathVariable Integer id) {
-        return service.getById(id);
+    public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
+
+        Employee employee = service.getById(id);
+        EmployeeReadDto dto = converter.toReadDto(employee);
+
+        return dto;
     }
 
     //Обновление юзера
