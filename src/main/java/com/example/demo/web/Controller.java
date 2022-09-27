@@ -1,14 +1,18 @@
 package com.example.demo.web;
 
 import com.example.demo.domain.Employee;
+import com.example.demo.dto.EmployeeDto;
 import com.example.demo.service.Service;
+import com.example.demo.util.config.UserMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
+
 @Slf4j
 @RestController
 @AllArgsConstructor
@@ -17,12 +21,14 @@ public class Controller {
 
     private final Service service;
 
+    private final UserMapper userMapper;
+
     //Операция сохранения юзера в базу данных
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee saveEmployee(@RequestBody Employee employee) {
-        log.info("created employee");
-        return service.create(employee);
+    public EmployeeDto saveEmployee(@RequestBody @Valid Employee employee) {
+        Employee employee1 = service.create(employee);
+        return userMapper.toDto(employee1);
 
     }
 
