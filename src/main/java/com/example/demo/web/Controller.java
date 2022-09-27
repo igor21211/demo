@@ -28,8 +28,7 @@ public class Controller {
     @ResponseStatus(HttpStatus.CREATED)
     public EmployeeDto saveEmployee(@RequestBody @Valid Employee employee) {
         Employee employee1 = service.create(employee);
-        return userMapper.toDto(employee1);
-
+        return userMapper.INSTANCE.toDto(employee1);
     }
 
     //Получение списка юзеров
