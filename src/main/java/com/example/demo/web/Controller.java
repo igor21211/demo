@@ -1,7 +1,11 @@
 package com.example.demo.web;
 
 import com.example.demo.domain.Employee;
+import com.example.demo.dto.EmployeeDto;
+import com.example.demo.dto.EmployeePayDto;
+import com.example.demo.dto.EmployeePlanDto;
 import com.example.demo.service.Service;
+import com.example.demo.util.config.UserMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,16 +22,16 @@ public class Controller {
 
     private final Service service;
 
-//    private final UserMapper userMapper;
-//
-//    //Операция сохранения юзера в базу данных
-//    @PostMapping("/users")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public EmployeeDto saveEmployee(@RequestBody  Employee employee) {
-//        return userMapper.toDto(service.create(employee));
-//    }
+    private final UserMapper userMapper;
 
-    //Получение списка юзеров
+    //Операция сохранения юзера в базу данных
+    @PostMapping("/users")
+    @ResponseStatus(HttpStatus.CREATED)
+    public EmployeeDto saveEmployee(@RequestBody Employee employee) {
+        return userMapper.toDto(service.create(employee));
+    }
+
+    //  Получение списка юзеров
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getAllUsers() {
@@ -51,8 +55,14 @@ public class Controller {
 
     @PutMapping("/users/pay/{id}/{sum}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee payEmployee(@PathVariable("id") Integer id, @PathVariable("sum") String sum) {
-        return service.pay(id, sum);
+    public EmployeePayDto payEmployee(@PathVariable("id") Integer id, @PathVariable("sum") String sum) {
+        return userMapper.payDto(service.pay(id, sum));
+    }
+
+    @GetMapping("/users/plan/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public EmployeePlanDto planEmployee(@PathVariable("id") Integer id) {
+        return userMapper.getplanDto(service.getById(id));
     }
 
     //Удаление по id
@@ -71,14 +81,14 @@ public class Controller {
 
     @GetMapping(value = "/users", params = {"email"})
     @ResponseStatus(HttpStatus.OK)
-    public Employee findByEmail(@RequestParam(value = "email") String email){
+    public Employee findByEmail(@RequestParam(value = "email") String email) {
         return service.findByEmail(email);
     }
 
     @GetMapping("/users/plan")
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> findByCountryAndPlan(@RequestParam(value = "country") String country, @RequestParam(value = "plan") Integer plan){
-        return service.findAllByPlanAndCountry(country,plan);
+    public List<Employee> findByCountryAndPlan(@RequestParam(value = "country") String country, @RequestParam(value = "plan") Integer plan) {
+        return service.findAllByPlanAndCountry(country, plan);
     }
 
 }
