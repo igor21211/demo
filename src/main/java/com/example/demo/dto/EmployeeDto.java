@@ -24,7 +24,6 @@ public class EmployeeDto {
     public String country;
     @Email
     public String email;
-    @NotEmpty
     @NotNull(message = "please input your number of phone")
     public Long numberOfPhone;
 
