@@ -8,8 +8,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
 import java.util.Date;
@@ -24,11 +22,8 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotNull(message = "Field name must be not null")
-    @Size(min = 2, max = 32, message = "Name must be between 2 and 32 characters long")
+
     private String name;
-    @NotEmpty
-    @NotNull(message = "please input your country")
     @Size(min = 2, max = 42, message = "Country name must be between 2 and 32 characters long")
     private String country;
     @Email

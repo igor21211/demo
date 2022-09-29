@@ -4,6 +4,7 @@ import com.example.demo.domain.Employee;
 import com.example.demo.dto.EmployeeDto;
 import com.example.demo.dto.EmployeePayDto;
 import com.example.demo.dto.EmployeePlanDto;
+import com.example.demo.dto.EmployeeReadDto;
 import com.example.demo.service.Service;
 import com.example.demo.util.config.UserMapper;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -27,7 +29,8 @@ public class Controller {
     //Операция сохранения юзера в базу данных
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public EmployeeDto saveEmployee(@RequestBody Employee employee) {
+    public EmployeeDto saveEmployee(@RequestBody @Valid EmployeeDto employeedto) {
+        Employee employee = userMapper.toEmployee(employeedto);
         return userMapper.toDto(service.create(employee));
     }
 
@@ -41,8 +44,9 @@ public class Controller {
     //Получения юзера по id
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Employee getEmployeeById(@PathVariable Integer id) {
-        return service.getById(id);
+    public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
+        Employee employee = service.getById(id);
+        return userMapper.toReadDto(employee);
     }
 
     //Обновление юзера
