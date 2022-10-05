@@ -6,9 +6,14 @@ import com.example.demo.util.Exeptions.ResourceNotFoundException;
 import com.example.demo.util.Exeptions.ResourceWasDeletedException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Date.from;
@@ -29,6 +34,15 @@ public class ServiceBean implements Service {
     public Employee findByEmail(String email) {
         Employee employee1 = repository.findByEmail(email);
         return employee1;
+    }
+
+    @Override
+    public Page<Employee> getAllWithPagination(int page, int size, List<String> sortList, String sortOrder) {
+        log.debug("getAllWithPagination() - start: pageable = {}");
+        Pageable pageable1 = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
+        Page<Employee> list = repository.findAll(pageable1);
+        log.debug("getAllWithPagination() - end: list = {}", list);
+        return list;
     }
 
 
@@ -107,5 +121,27 @@ public class ServiceBean implements Service {
                     "plan Enterprise(1) = 600");
         }
         return plan_id;
+    }
+
+    @Override
+    public Page<Employee> findByCountryContaining(String country, int page, int size, List<String> sortList, String sortOrder) {
+        // create Pageable object using the page, size and sort details
+        Pageable pageable = PageRequest.of(page, size, Sort.by(createSortOrder(sortList, sortOrder)));
+        // fetch the page object by additionally passing pageable with the filters
+        return repository.findByCountryContaining(country, pageable);
+    }
+
+    private List<Sort.Order> createSortOrder(List<String> sortList, String sortDirection) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        Sort.Direction direction;
+        for (String sort : sortList) {
+            if (sortDirection != null) {
+                direction = Sort.Direction.fromString(sortDirection);
+            } else {
+                direction = Sort.Direction.DESC;
+            }
+            sorts.add(new Sort.Order(direction, sort));
+        }
+        return sorts;
     }
 }

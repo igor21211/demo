@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -162,6 +164,29 @@ public class Controller {
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
     public List<Employee> findByCountryAndPlan(@RequestParam(value = "country") String country, @RequestParam(value = "plan") Integer plan) {
         return service.findAllByPlanAndCountry(country, plan);
+    }
+
+    @GetMapping("/users/info")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<Employee> getPage(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "5") int size,
+                                  @RequestParam(defaultValue = "") List<String> sortList,
+                                  @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder
+    ) {
+
+        return service.getAllWithPagination(page, size, sortList, sortOrder.toString());
+    }
+
+    @GetMapping("/users/country")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<Employee> findByCountry(@RequestParam(required = false) String country,
+                                        @RequestParam(defaultValue = "1") int page,
+                                        @RequestParam(defaultValue = "3") int size,
+                                        @RequestParam(defaultValue = "") List<String> sortList,
+                                        @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
+        //Pageable paging = PageRequest.of(page, size);
+        //Pageable paging = PageRequest.of(page, size, Sort.by("name").ascending());
+        return service.findByCountryContaining(country, page, size, sortList, sortOrder.toString());
     }
 
 }

@@ -13,14 +13,13 @@ public interface UserMapper {
 
     EmployeeDto toDto(Employee employee);
 
-
     Employee toEmployee(EmployeeDto employeeDto);
 
     EmployeeReadDto toReadDto(Employee employee);
 
-    Employee toObjectFromRead(EmployeeReadDto employeeReadDto);
 
     EmployeePlanDto getplanDto(Employee employee);
 
     EmployeePayDto payDto(Employee employee);
+
 }
