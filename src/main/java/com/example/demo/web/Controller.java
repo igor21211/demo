@@ -1,6 +1,7 @@
 package com.example.demo.web;
 
 import com.example.demo.domain.Employee;
+import com.example.demo.dto.EmployeeDTO;
 import com.example.demo.service.Service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @RestController
 @AllArgsConstructor
@@ -76,8 +79,9 @@ public class Controller {
 
     @GetMapping("/users/plan")
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> findByCountryAndPlan(@RequestParam(value = "country") String country, @RequestParam(value = "plan") Integer plan){
-        return service.findAllByPlanAndCountry(country,plan);
+    public List<EmployeeDTO> findByCountryAndPlan(@RequestParam(value = "country") String country, @RequestParam(value = "plan") Integer plan) {
+        var employee = service.findAllByPlanAndCountry(country, plan);
+        return employee.stream().map(EmployeeDTO::toDto).collect(Collectors.toList());
     }
 
 }
