@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -57,8 +58,9 @@ public class Controller {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
-    public List<Employee> getAllUsers() {
-        return service.getAll();
+    public List<EmployeeDto> getAllUsers() {
+        var employee = service.getAll();
+        return employee.stream().map(EmployeeDto::map).collect(Collectors.toList());
     }
 
     //Получения юзера по id
@@ -184,9 +186,75 @@ public class Controller {
                                         @RequestParam(defaultValue = "3") int size,
                                         @RequestParam(defaultValue = "") List<String> sortList,
                                         @RequestParam(defaultValue = "DESC") Sort.Direction sortOrder) {
-        //Pageable paging = PageRequest.of(page, size);
-        //Pageable paging = PageRequest.of(page, size, Sort.by("name").ascending());
+
         return service.findByCountryContaining(country, page, size, sortList, sortOrder.toString());
     }
 
+    @GetMapping(value = "/users/stream/api/country", params = {"country"})
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Return all Employee ", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "OK. Information was get successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
+            @ApiResponse(responseCode = "409", description = "Employee already exists")})
+    public List<EmployeeDto> getallUsersWithCountry(@RequestParam(value = "country") String country) {
+        var employee = service.getAllUsersCountry(country);
+        return employee.stream().map(EmployeeDto::map).collect(Collectors.toList());
+    }
+
+    @GetMapping(value = "/users/stream/api/plan", params = {"plan"})
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Return all Employee plan ", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "OK. Information was get successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
+            @ApiResponse(responseCode = "409", description = "Employee already exists")})
+    public List<Employee> getAllUsersForPlan(@RequestParam(value = "plan") Integer plan) {
+        return service.getAllUserPlan(plan);
+    }
+
+    @GetMapping(value = "/users/stream/api/filters", params = {"country", "name", "email"})
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Return all Employee plan ", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "OK. Information was get successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
+            @ApiResponse(responseCode = "409", description = "Employee already exists")})
+    public List<EmployeeDto> getAllUsersFilters(@RequestParam(value = "country") String country,
+                                                @RequestParam(value = "name") String name,
+                                                @RequestParam(value = "email") String email) {
+        return service.getFilters(country, name, email)
+                .stream().map(EmployeeDto::map)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping(value = "/users/stream/api/plan-country", params = {"country", "plan"})
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Return all Employee plan and country ", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "OK. Information was get successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
+            @ApiResponse(responseCode = "409", description = "Employee already exists")})
+    public List<Employee> getAllUsersFiltersForPlanAndCountry(@RequestParam(value = "country") String country,
+                                                              @RequestParam(value = "plan") Integer plan) {
+        return service.findAllByPlanAndCountry(country, plan);
+    }
+
+    @GetMapping(value = "/users/stream/api/limit", params = {"limit"})
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Return all Employee plan and country ", tags = {"Employee"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "OK. Information was get successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
+            @ApiResponse(responseCode = "409", description = "Employee already exists")})
+    public List<EmployeeDto> getAllUsersFiltersForPlanAndCountry(@RequestParam(value = "limit") Integer limit) {
+        return service.getListWithLimit(limit).stream()
+                .map(EmployeeDto::map)
+                .collect(Collectors.toList());
+    }
 }

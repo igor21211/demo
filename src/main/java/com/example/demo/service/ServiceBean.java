@@ -15,6 +15,7 @@ import javax.persistence.EntityNotFoundException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.Date.from;
 
@@ -107,7 +108,46 @@ public class ServiceBean implements Service {
 
     }
 
-    public Integer generatePlan(Integer sum){
+    @Override
+    public List<Employee> getAllUsersCountry(String country) {
+        var employee = repository.findAll();
+        return employee.stream()
+                .filter(employee1 -> country.equals(employee1.getCountry()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Employee> getAllUserPlan(Integer plan) {
+        return repository.findAll().stream()
+                .filter(employee -> plan.equals(employee.getPlan()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Employee> getFilters(String country, String name, String email) {
+        return repository.findAll().stream()
+                .filter(employee -> country.equals(employee.getCountry()))
+                .filter(employee -> name.equals(employee.getName()))
+                .filter(employee -> email.equals(employee.getEmail()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Employee> getFiltersForPlanAndCountry(String country, Integer plan) {
+        return repository.findAll().stream()
+                .filter(employee -> country.equals(employee.getCountry()))
+                .filter(employee -> plan.equals(employee.getPlan()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Employee> getListWithLimit(Integer limit) {
+        return repository.findAll().stream()
+                .limit(limit)
+                .collect(Collectors.toList());
+    }
+
+    public Integer generatePlan(Integer sum) {
         Integer plan_id = 0;
         if (sum <= 200) {
             plan_id = 3;

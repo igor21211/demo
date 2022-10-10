@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 
+import com.example.demo.domain.Employee;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -27,4 +28,13 @@ public class EmployeeDto {
     @NotNull(message = "please input your number of phone")
     public Long numberOfPhone;
 
+    public static EmployeeDto map(Employee employee) {
+        return new EmployeeDto(
+                employee.getName(),
+                employee.getCountry(),
+                employee.getEmail(),
+                employee.getNumberOfPhone()
+
+        );
+    }
 }

@@ -29,4 +29,14 @@ public interface Service {
 
     void removeAll();
 
+    List<Employee> getAllUsersCountry(String country);
+
+    List<Employee> getAllUserPlan(Integer plan);
+
+    List<Employee> getFilters(String country, String name, String email);
+
+    List<Employee> getFiltersForPlanAndCountry(String country, Integer plan);
+
+    List<Employee> getListWithLimit(Integer limit);
+
 }
