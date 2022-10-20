@@ -27,7 +27,8 @@ springdoc:
     patch: /v3/api-docs.yaml
 
 flyway:
-
   enabled: true
-
   baseline-on-migrate: true
+
+liquibase:
+  change-log: classpath:liquibase/changelog.yml

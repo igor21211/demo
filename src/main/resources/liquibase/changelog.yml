@@ -1,0 +1,26 @@
+databaseChangeLog:
+  changeSet:
+    id: DEV-1
+    author: igor
+    changes:
+      - createTable:
+          tableName: users
+          remarks: пользователи
+          columns:
+            -
+          create table users
+          (
+          id              serial
+          primary key,
+          country         varchar(42),
+          date_activation timestamp,
+          date_created    timestamp,
+          email           varchar(255),
+          name            varchar(255),
+          number_of_phone bigint,
+          employee_id     integer
+          constraint fkd0dbv9cscj2d4e1cedej5674o
+          references card,
+          plan            integer,
+          gender          varchar
+          );
