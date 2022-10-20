@@ -9,7 +9,7 @@ spring:
   # JPA properties
   jpa:
     hibernate:
-      ddl-auto: update # When you launch the application for the first time - switch "none" at "create"
+      ddl-auto: validate # When you launch the application for the first time - switch "none" at "create"
     show-sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -25,3 +25,9 @@ springdoc:
     path: /swagger-ui.html # swagger ui custom path
   api-docs:
     patch: /v3/api-docs.yaml
+
+flyway:
+
+  enabled: true
+
+  baseline-on-migrate: true

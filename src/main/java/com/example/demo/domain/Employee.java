@@ -50,5 +50,8 @@ public class Employee {
     @JoinColumn(name = "employee_id")
     private List<Course> course = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
 }
 
