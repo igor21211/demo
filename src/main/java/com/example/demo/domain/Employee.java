@@ -2,21 +2,24 @@ package com.example.demo.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+
 public class Employee {
 
     @Id
@@ -37,6 +40,15 @@ public class Employee {
     @Column(name = "date_activation")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date dateActivation;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "employee_id")
+    private Card card;
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER
+    )
+    @JoinColumn(name = "employee_id")
+    private List<Course> course = new ArrayList<>();
 
 }
 

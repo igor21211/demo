@@ -4,7 +4,6 @@ import com.example.demo.domain.Employee;
 import com.example.demo.dto.EmployeeDto;
 import com.example.demo.dto.EmployeePayDto;
 import com.example.demo.dto.EmployeePlanDto;
-import com.example.demo.dto.EmployeeReadDto;
 import com.example.demo.service.Service;
 import com.example.demo.util.config.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,9 +57,9 @@ public class Controller {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
-    public List<EmployeeDto> getAllUsers() {
-        var employee = service.getAll();
-        return employee.stream().map(EmployeeDto::map).collect(Collectors.toList());
+    public List<Employee> getAllUsers() {
+        return service.getAll();
+        // return employee.stream().map(EmployeeDto::map).collect(Collectors.toList());
     }
 
     //Получения юзера по id
@@ -73,9 +72,9 @@ public class Controller {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND. Specified employee request not found."),
             @ApiResponse(responseCode = "409", description = "Employee already exists")})
-    public EmployeeReadDto getEmployeeById(@PathVariable Integer id) {
-        Employee employee = service.getById(id);
-        return userMapper.toReadDto(employee);
+    public Employee getEmployeeById(@PathVariable Integer id) {
+        return service.getById(id);
+        // return userMapper.toReadDto(employee);
     }
 
     //Обновление юзера

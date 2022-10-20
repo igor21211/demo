@@ -1,6 +1,7 @@
 package com.example.demo.dto;
 
 
+import com.example.demo.domain.Course;
 import com.example.demo.domain.Employee;
 import lombok.*;
 
@@ -8,6 +9,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -28,13 +31,18 @@ public class EmployeeDto {
     @NotNull(message = "please input your number of phone")
     public Long numberOfPhone;
 
+    public CardDto card;
+
+    public List<Course> course = new ArrayList<>();
+
     public static EmployeeDto map(Employee employee) {
         return new EmployeeDto(
                 employee.getName(),
                 employee.getCountry(),
                 employee.getEmail(),
-                employee.getNumberOfPhone()
-
+                employee.getNumberOfPhone(),
+                builder().card,
+                builder().course
         );
     }
 }
