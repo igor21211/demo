@@ -27,7 +27,10 @@ springdoc:
     patch: /v3/api-docs.yaml
 
 flyway:
-
   enabled: true
-
   baseline-on-migrate: true
+
+  security:
+    user:
+      name: admin
+      password: admin
